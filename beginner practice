@@ -1,0 +1,57 @@
+print("H A N G M A N")
+
+def hangman():
+    import random
+
+    guesslist = ['python', 'java', 'kotlin', 'javascript']
+    bingo = random.choice(guesslist)
+
+    output = "-" * len(bingo)
+    outputlist = list(output)
+    lives = 8
+    already_guessed = []
+
+    while True:
+        print('\n' + output)
+        guess_letter = input("Input a letter:")
+
+        if len(guess_letter) != 1:
+            print('You should input a single letter')
+            continue
+
+        if guess_letter.lower() != guess_letter or not guess_letter.isalpha():
+            print('Please enter a lowercase English letter')
+            continue
+
+        if guess_letter in already_guessed:
+            print("You've already guessed this letter")
+            continue
+
+        already_guessed.append(guess_letter)
+
+        if guess_letter not in bingo:
+            print("That letter doesn't appear in the word")
+            lives -= 1
+        if lives == 0:
+            print("You lost!")
+            break
+
+        if guess_letter in bingo:
+            output = ""
+            for i in range(len(bingo)):
+                if guess_letter == bingo[i]:
+                    outputlist[i] = guess_letter
+                output += outputlist[i]
+            if output == bingo:
+                print('You guessed the word', bingo + '!')
+                print('You survived!')
+                break
+
+while True:
+    choose = input('Type "play" to play the game, "exit" to quit:')
+    if choose.lower() == 'play':
+        hangman()
+    elif choose.lower() == 'exit':
+        break
+    else:
+        continue
