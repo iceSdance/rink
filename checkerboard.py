@@ -24,7 +24,7 @@ def one_move(xo):
         elif not 0 < int(move_x) < m + 1 or not 0 < int(move_y) < m + 1:
             print(f'Coordinates should be from 1 to {m}!')
             continue
-        elif checkerboard[(int(move_x) - 1)][(int(move_y) - 1)] != '_':
+        elif checkerboard[(int(move_x) - 1)][(int(move_y) - 1)] != '_' * len_s:
             print('This cell is occupied! Choose another one!')
             continue
         else:
@@ -68,14 +68,14 @@ cells = '_' * len_s * m * m
 
 checkerboard = [[cells[i:i + len_s] for i in range(0, m * m * len_s, len_s)][j:j + m] for j in range(0, m * m, m)]
 # move = 1
-checkerboard[random.randint(0, m - 1)][random.randint(0, m - 1)] = 'X'
+checkerboard[random.randint(0, m - 1)][random.randint(0, m - 1)] = 'X' * len_s
 print_checkerboard()
 
 move = 2
 x, y = 0, 0
 
 while True:
-    x_or_o = 'O' if move % 2 == 0 else 'X'
+    x_or_o = 'O' * len_s if move % 2 == 0 else 'X' * len_s
     one_move(x_or_o)
     print_checkerboard()
     if game_not_finish():
