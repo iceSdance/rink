@@ -1,0 +1,41 @@
+import random
+
+triads = ['000', '001', '010', '011', '100', '101', '110', '111']
+final_string = ''
+samples_dict = dict.fromkeys(triads)
+
+while len(final_string) < 100:
+    usertype = input('Print a random string containing 0 or 1:\n\n')
+    final_string += ''.join(n for n in list(usertype) if n in '01')
+    print(f'Current data length is {len(final_string)}, {100 - len(final_string)} symbols left'
+          if len(final_string) < 100 else '')
+print(f'Final data string:\n{final_string}\n\n')
+
+for triad in triads:
+    sample = ''.join(final_string[i + 3] for i in range(len(final_string) - 3) if triad == final_string[i:i + 3])
+    follow_character = str([sample.count(i) for i in '01'].index(max([sample.count(i) for i in '01'])))
+    follow_character = '0' if sample.count('0') > sample.count('1') else '1'
+    samples_dict[triad] = [sample.count('0'), sample.count('1'), follow_character, sample]
+
+# another_test_str = '0110001010100101'
+another_test_str = ''.join(n for n in list(input('Please enter a test string containing 0 or 1:\n')) if n in '01')
+print(another_test_str + '\nprediction:')
+
+predict_str = another_test_str[:3]
+for i in range(len(another_test_str) - 3):
+    follow_character = samples_dict[predict_str[i:i + 3]][2]
+    times_0 = samples_dict[predict_str[i:i + 3]][0]
+    times_1 = samples_dict[predict_str[i:i + 3]][1]
+    times = samples_dict[predict_str[i:i + 3]][0] + samples_dict[predict_str[i:i + 3]][1]
+
+    predict_next_character = follow_character \
+        if abs(times_0 - times_1) / times > 0 else random.choice(samples_dict[predict_str[i:i + 3]][3])
+    predict_str += predict_next_character
+print(predict_str)
+
+
+N = 0
+for i in range(3, len(another_test_str)):
+    N += 1 if another_test_str[i] == predict_str[i] else 0
+print(f'\nComputer guessed right {N} out of {len(another_test_str) - 3} '
+      f'symbols ({round(N / (len(another_test_str) - 3) * 100, 2)}%)')
