@@ -1,0 +1,18 @@
+import requests
+
+currency_local = input().lower()
+r = requests.get(f"http://www.floatrates.com/daily/{currency_local}.json").json()
+cache = {c: r[c]['rate'] for c in ['usd', 'eur'] if r.get(c) is not None}
+while True:
+    currency_exchange = input().lower()
+    if len(currency_exchange) == 0:
+        break
+    else:
+        amount = float(input())
+        print('Checking the cache...')
+        if cache.get(currency_exchange) is None:
+            print('Sorry, but it is not in the cache!')
+            cache[currency_exchange] = r[currency_exchange]['rate']
+        else:
+            print('Oh! It is in the cache!')
+        print(f'You received {round(amount * cache[currency_exchange], 2)} {currency_exchange.upper()}.')
